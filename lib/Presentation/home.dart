@@ -15,7 +15,11 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   @override
   final TextEditingController _search = TextEditingController();
+
   Widget build(BuildContext context) {
+
+  double deviceWidth = MediaQuery.of(context).size.width;
+
     return MaterialApp(
         home: Scaffold(
       body: SingleChildScrollView(
@@ -206,72 +210,75 @@ class _homeState extends State<home> {
               height: 8,
             ),
             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Recent Place',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 10, 2, 2),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text(
+                    'See More',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 10, 2, 2),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Padding(
               padding: EdgeInsets.all(10.0), // Adjust the padding as needed
               child: Container(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Recent Place',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 10, 2, 2),
-                            fontWeight: FontWeight.bold,
+                    Container(
+                      width: 0.45 * deviceWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                           Image.asset("assets/Parkingone.png"),
+                          const SizedBox(
+                            height: 8,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                          width: 4,
-                        ),
-                        Transform.scale(
-                          scaleY: 1,
-                          scaleX: 1,
-                          child: Image.asset("assets/Parkingone.png"),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const Text(
-                          'Parking at Urban Parking',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 10, 2, 2),
-                            fontWeight: FontWeight.bold,
+                          const Text(
+                            'Parking at Urban Parking',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 10, 2, 2),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'See More',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 10, 2, 2),
-                            fontWeight: FontWeight.bold,
+                    Container(
+                      width: 0.45 * deviceWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset("assets/Parkingtwo.png"),
+                          
+                          const SizedBox(
+                            height: 8,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Transform.scale(
-                          scaleY: 1,
-                          scaleX: 1,
-                          child: Image.asset("assets/Parkingtwo.png"),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const Text(
-                          'Jermyn Street ,SWTY',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 10, 2, 2),
-                            fontWeight: FontWeight.bold,
+                          const Text(
+                            'Jermyn Street ,SWTY',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 10, 2, 2),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
