@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:easypark/Presentation/nearestSlots.dart';
 import 'package:easypark/Presentation/parkingSlots.dart';
 import 'package:easypark/models/ParkingDetails.dart';
 import 'package:flutter/material.dart';
@@ -298,6 +298,7 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                                     ),
                                   ),
                                   InkWell(
+                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => NearestSlots(uuid: parking_lot.uuid!))),
                                     child: Container(
                                       height: 50,
                                       width: 0.42 * deviceWidth,

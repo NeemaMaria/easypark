@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:easypark/models/ParkingDetails.dart';
 import 'package:easypark/models/Slot.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,7 @@ class ParkingSlotsState extends State<ParkingSlots> {
 
   ParkingDetails parking_lot = ParkingDetails();
 
-  // late Timer _timer;
+  late Timer _timer;
 
   Future<ParkingDetails> fetchDetails() async {
     var response = await http.get(
@@ -89,14 +88,14 @@ class ParkingSlotsState extends State<ParkingSlots> {
     super.initState();
 
     // periodic fetching
-    // const apiCallInterval = Duration(seconds: 2);
-    // _timer = Timer.periodic(apiCallInterval, (Timer timer) {
-    //   fetchDetails().then((value) {
-    //     setState(() {
-    //       parking_lot = value;
-    //     });
-    //   });
-    // });
+    const apiCallInterval = Duration(seconds: 2);
+    _timer = Timer.periodic(apiCallInterval, (Timer timer) {
+      fetchDetails().then((value) {
+        setState(() {
+          parking_lot = value;
+        });
+      });
+    });
 
     // initial fetching
     fetchDetails().then((value) {
@@ -106,6 +105,13 @@ class ParkingSlotsState extends State<ParkingSlots> {
         slots = displaySlots(0, 30);
       });
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -248,7 +254,8 @@ class ParkingSlotsState extends State<ParkingSlots> {
                                                                     ),
                                                                     InkWell(
                                                                       onTap: () => {
-                                                                        print("Booking slot ${selected!.slot_number}...")
+                                                                        print("Booking slot ${selected!.slot_number}..."),
+                                                                        Navigator.pop(context)
                                                                       },
                                                                       child: Container(
                                                                         width: 0.30 * deviceWidth,
