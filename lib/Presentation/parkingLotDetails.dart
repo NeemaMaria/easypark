@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easypark/Presentation/parkingSlots.dart';
 import 'package:easypark/models/ParkingDetails.dart';
 import 'package:flutter/material.dart';
 import "../variables.dart";
@@ -9,7 +10,8 @@ class ParkingLotDetails extends StatefulWidget {
   final String uuid;
   final double distance;
 
-  const ParkingLotDetails({super.key, required this.uuid, required this.distance});
+  const ParkingLotDetails(
+      {super.key, required this.uuid, required this.distance});
 
   @override
   State<ParkingLotDetails> createState() => _ParkingLotDetailsState();
@@ -53,7 +55,8 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage("http://$server:8000${parking_lot.image_url}/"),
+                            image: NetworkImage(
+                                "http://$server:8000${parking_lot.image_url}/"),
                             fit: BoxFit.cover)),
                   ),
                   Column(
@@ -113,7 +116,7 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          parking_lot.name,
+                                          parking_lot.name!,
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold),
@@ -166,7 +169,7 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                                           color: Colors.grey[800],
                                         ),
                                         Text(
-                                          "${parking_lot.occupancy.split("/")[0]} Slots",
+                                          "${parking_lot.free_slots} Slots",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey[800]),
@@ -260,7 +263,9 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                               padding: EdgeInsets.symmetric(horizontal: 20.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: parking_lot.services_provided.map((service) => Text("• $service")).toList(),
+                                children: parking_lot.services_provided!
+                                    .map((service) => Text("• $service"))
+                                    .toList(),
                               ),
                             ),
                             Expanded(
@@ -273,6 +278,7 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   InkWell(
+                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ParkingSlots(uuid: parking_lot.uuid!))),
                                     child: Container(
                                       height: 50,
                                       width: 0.42 * deviceWidth,

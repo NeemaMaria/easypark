@@ -1,32 +1,34 @@
 import 'package:easypark/models/Slot.dart';
 
 class ParkingDetails {
-  final String uuid;
-  final String name;
-  final String image_url;
-  final double latitude;
-  final double longitude;
-  final int rate;
-  final String open;
-  final String close;
-  final int number_of_stories;
-  final List services_provided;
-  final String occupancy;
-  final List slots;
+  String? uuid;
+  String? name;
+  String? image_url;
+  double? latitude;
+  double? longitude;
+  int? rate;
+  String? open;
+  String? close;
+  int? number_of_stories;
+  List? services_provided;
+  String? occupancy;
+  int? free_slots;
+  List? slots;
 
-  const ParkingDetails({
-    required this.uuid,
-    required this.name,
-    required this.image_url,
-    required this.latitude,
-    required this.longitude,
-    required this.rate,
-    required this.open,
-    required this.close,
-    required this.number_of_stories,
-    required this.services_provided,
-    required this.occupancy,
-    required this.slots,
+  ParkingDetails({
+    this.uuid,
+    this.name,
+    this.image_url,
+    this.latitude,
+    this.longitude,
+    this.rate,
+    this.open,
+    this.close,
+    this.number_of_stories,
+    this.services_provided,
+    this.occupancy,
+    this.free_slots,
+    this.slots,
   });
 
   factory ParkingDetails.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class ParkingDetails {
         number_of_stories: json['number_of_stories'],
         services_provided: json['services_provided'],
         occupancy: json['occupancy'],
+        free_slots: freeSlots(json['occupancy']),
         slots: json['slots'].map((slot) => Slot.fromJson(slot)).toList());
   }
 }
@@ -49,4 +52,9 @@ class ParkingDetails {
 String format_time(time) {
   List arr = time.split(":");
   return arr.sublist(0,2).join(":");
+}
+
+int freeSlots(occupancy) {
+  List arr = occupancy.split("/");
+  return int.parse(arr[1]) - int.parse(arr[0]);
 }

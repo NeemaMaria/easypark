@@ -28,8 +28,8 @@ class ParkingLot {
       uuid: json['uuid'], 
       name: json['name'], 
       image_url: json['image'], 
-      open: json['open'], 
-      close: json['close'], 
+      open: format_time(json['open']), 
+      close: format_time(json['close']), 
       rate: json['rate'], 
       latitude: json['latitude'], 
       longitude: json['longitude'], 
@@ -37,4 +37,9 @@ class ParkingLot {
       distance: json['distance']
       );
   }
+}
+
+String format_time(time) {
+  List arr = time.split(":");
+  return arr.sublist(0,2).join(":");
 }

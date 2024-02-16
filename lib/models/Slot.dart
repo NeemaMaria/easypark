@@ -3,10 +3,12 @@ class Slot {
   double? latitude;
   double? longitude;
   final bool occupied;
+  final bool reserved;
 
   Slot(
       {required this.slot_number,
       required this.occupied,
+      required this.reserved,
       this.latitude,
       this.longitude});
 
@@ -15,6 +17,7 @@ class Slot {
         slot_number: json['slot_number'],
         latitude: json['latitude'] != null ? double.parse(json['latitude']) : null,
         longitude: json['longitude'] != null ? double.parse(json['longitude']) : null,
-        occupied: json['occupied']);
+        occupied: json['occupied'],
+        reserved: json['reserved']);
   }
 }
