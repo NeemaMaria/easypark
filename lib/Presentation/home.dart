@@ -1,9 +1,12 @@
-import 'dart:html';
-import 'dart:ui';
-
+import 'dart:convert';
+import 'package:easypark/models/ParkingLot.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/widgets.dart';
+import "package:http/http.dart" as http;
+import "../variables.dart";
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -13,11 +16,34 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-  @override
   final TextEditingController _search = TextEditingController();
+
+  List<ParkingLot> parking_lots = [];
+  ParkingLot nearest_lot = ParkingLot();
+
+  Future<List<ParkingLot>> fetchData() async {
+    var response = await http
+        .get(Uri.parse("http://$server:8000/nearest_parking_lots/$lat/$lon/"));
+    List lots = jsonDecode(response.body) as List;
+    return lots.map((lot) => ParkingLot.fromJson(lot)).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData().then(((value) {
+      setState(() {
+        nearest_lot = value[0];
+        parking_lots = value.sublist(1);
+      });
+    }));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    double deviceWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -47,13 +73,13 @@ class _homeState extends State<home> {
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text("Location",
                                   style: TextStyle(
                                       color:
                                           Color.fromARGB(255, 218, 218, 218))),
                               Text(
-                                "Kampala, Uganda",
+                                location_name,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Color.fromARGB(255, 218, 218, 218)),
@@ -96,13 +122,19 @@ class _homeState extends State<home> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Flexible(
-                                child: Text(
-                                    "Parking at Urban Parking Shelton Street Car Park, WC2H",
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 218, 218, 218),
-                                        fontSize: 24)),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Parking at ${nearest_lot.name}", // find how to make it flexible
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 218, 218, 218),
+                                          fontSize: 24)),
+                                  Text(
+                                    "${nearest_lot.distance!.toStringAsFixed(2)}Km away",
+                                    style: TextStyle(color: Colors.grey[500]),
+                                  )
+                                ],
                               ),
                               Container(
                                 height: 40,
@@ -128,7 +160,7 @@ class _homeState extends State<home> {
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   "Enter After",
                                   style: TextStyle(color: Colors.grey),
@@ -137,7 +169,7 @@ class _homeState extends State<home> {
                                   height: 8,
                                 ),
                                 Text(
-                                  "04 April at 10:30pm",
+                                  "${nearest_lot.open} am",
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 218, 218, 218),
                                       fontWeight: FontWeight.bold),
@@ -151,7 +183,7 @@ class _homeState extends State<home> {
                                   height: 8,
                                 ),
                                 Text(
-                                  "24 Hours",
+                                  "16 Hours",
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 218, 218, 218),
                                       fontWeight: FontWeight.bold),
@@ -160,7 +192,7 @@ class _homeState extends State<home> {
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   "Exit Before",
                                   style: TextStyle(color: Colors.grey),
@@ -169,7 +201,7 @@ class _homeState extends State<home> {
                                   height: 8,
                                 ),
                                 Text(
-                                  "05 April at 10:30pm",
+                                  "${nearest_lot.close} pm",
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 218, 218, 218),
                                       fontWeight: FontWeight.bold),
@@ -183,7 +215,7 @@ class _homeState extends State<home> {
                                   height: 8,
                                 ),
                                 Text(
-                                  "\$52.00",
+                                  "UGX ${nearest_lot.rate}",
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 218, 218, 218),
                                       fontWeight: FontWeight.bold),
@@ -205,73 +237,88 @@ class _homeState extends State<home> {
             const SizedBox(
               height: 8,
             ),
+            const Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Nearest Parking Lots',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 10, 2, 2),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'See More',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 10, 2, 2),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: EdgeInsets.all(10.0), // Adjust the padding as needed
               child: Container(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Recent Place',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 10, 2, 2),
-                            fontWeight: FontWeight.bold,
+                    Container(
+                      width: 0.46 * deviceWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 8,
+                            width: 4,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                          width: 4,
-                        ),
-                        Transform.scale(
-                          scaleY: 1,
-                          scaleX: 1,
-                          child: Image.asset("assets/Parkingone.png"),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const Text(
-                          'Parking at Urban Parking',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 10, 2, 2),
-                            fontWeight: FontWeight.bold,
+                          Transform.scale(
+                            scaleY: 1,
+                            scaleX: 1,
+                            child: Image.asset("assets/Parkingone.png"),
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const Text(
+                            'Parking at Urban Parking',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 10, 2, 2),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'See More',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 10, 2, 2),
-                            fontWeight: FontWeight.bold,
+                    Container(
+                      width: 0.46 * deviceWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 8,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Transform.scale(
-                          scaleY: 1,
-                          scaleX: 1,
-                          child: Image.asset("assets/Parkingtwo.png"),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const Text(
-                          'Jermyn Street ,SWTY',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 10, 2, 2),
-                            fontWeight: FontWeight.bold,
+                          Transform.scale(
+                            scaleY: 1,
+                            scaleX: 1,
+                            child: Image.asset("assets/Parkingtwo.png"),
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const Text(
+                            'Jermyn Street ,SWTY',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 10, 2, 2),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -280,6 +327,6 @@ class _homeState extends State<home> {
           ],
         ),
       ),
-    ));
+    );
   }
 }

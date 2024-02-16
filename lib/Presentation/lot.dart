@@ -1,6 +1,3 @@
-import 'dart:html';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -88,10 +85,10 @@ class _lotState extends State<lot> {
             ElevatedButton(
               onPressed: () {},
               child: Text('Proceed with slot (P6-06)'),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
-                minimumSize: Size(200.0, 50.0),
-              ),
+              // style: ElevatedButton.styleFrom(
+              //   primary: Colors.blue,
+              //   minimumSize: Size(200.0, 50.0),
+              // ),
             ),
           ],
         ),
