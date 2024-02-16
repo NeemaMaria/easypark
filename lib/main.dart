@@ -2,7 +2,7 @@ import 'package:easypark/Presentation/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(EasyPark());
+  runApp(const EasyPark());
 }
 
 class EasyPark extends StatefulWidget {
@@ -15,8 +15,9 @@ class EasyPark extends StatefulWidget {
 class _EasyParkState extends State<EasyPark> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: "Easy Park",
+      debugShowCheckedModeBanner: false,
       home: home()
     );
   }
