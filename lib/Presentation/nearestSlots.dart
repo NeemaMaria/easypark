@@ -120,7 +120,7 @@ class _NearestSlotsState extends State<NearestSlots> {
                         child: const Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
-                            "Book Slot",
+                            "Reserve",
                             style: TextStyle(
                               color: Colors.white,
                             ),

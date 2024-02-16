@@ -267,7 +267,7 @@ class ParkingSlotsState extends State<ParkingSlots> {
                                                                         child: Padding(
                                                                           padding: const EdgeInsets.all(10.0),
                                                                           child: Text(
-                                                                            "Book",
+                                                                            "Reserve",
                                                                             style: TextStyle(
                                                                               color: Colors.white,
                                                                               fontWeight: FontWeight.bold
