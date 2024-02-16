@@ -28,6 +28,70 @@ class _homeState extends State<home> {
     return lots.map((lot) => ParkingLot.fromJson(lot)).toList();
   }
 
+  Column organize_lots(List parking_lots) {
+    double deviceWidth = MediaQuery.of(context).size.width;
+    List<Widget> lots = [];
+
+    for (int i = 0; i < parking_lots.length; i += 2) {
+      Widget pair = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          buildParkingLotWidget(parking_lots[i], deviceWidth),
+          if (i + 1 < parking_lots.length)
+            buildParkingLotWidget(parking_lots[i + 1], deviceWidth),
+        ],
+      );
+      lots.add(pair);
+    }
+
+    return Column(
+      children: lots,
+    );
+  }
+
+  Widget buildParkingLotWidget(ParkingLot lot, double deviceWidth) {
+    return Container(
+      width: 0.46 * deviceWidth,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 8,
+            width: 4,
+          ),
+          Container(
+            height: 100,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(7),
+                image: DecorationImage(
+                    image: NetworkImage("http://$server:8000${lot.image_url}/"),
+                    fit: BoxFit.cover)),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                lot.name!,
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 10, 2, 2),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "${lot.distance!.toStringAsFixed(1)}km",
+                style: TextStyle(
+                    fontWeight: FontWeight.w500, color: Colors.grey[600]),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -125,7 +189,8 @@ class _homeState extends State<home> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Parking at ${nearest_lot.name}", // find how to make it flexible
+                                  Text(
+                                      "Parking at ${nearest_lot.name}", // find how to make it flexible
                                       style: TextStyle(
                                           color: Color.fromARGB(
                                               255, 218, 218, 218),
@@ -261,69 +326,8 @@ class _homeState extends State<home> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(10.0), // Adjust the padding as needed
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      width: 0.46 * deviceWidth,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 8,
-                            width: 4,
-                          ),
-                          Transform.scale(
-                            scaleY: 1,
-                            scaleX: 1,
-                            child: Image.asset("assets/Parkingone.png"),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          const Text(
-                            'Parking at Urban Parking',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 10, 2, 2),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      width: 0.46 * deviceWidth,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Transform.scale(
-                            scaleY: 1,
-                            scaleX: 1,
-                            child: Image.asset("assets/Parkingtwo.png"),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          const Text(
-                            'Jermyn Street ,SWTY',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 10, 2, 2),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                padding: EdgeInsets.all(10.0), // Adjust the padding as needed
+                child: organize_lots(parking_lots)),
           ],
         ),
       ),
