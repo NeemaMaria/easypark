@@ -54,7 +54,7 @@ class _homeState extends State<home> {
 
   Widget buildParkingLotWidget(ParkingLot lot, double deviceWidth) {
     return InkWell(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ParkingLotDetails(uuid: lot.uuid!))), 
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ParkingLotDetails(uuid: lot.uuid!, distance: lot.distance!))), 
       child: Container(
         width: 0.46 * deviceWidth,
         child: Column(
@@ -186,7 +186,7 @@ class _homeState extends State<home> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ParkingLotDetails(uuid: nearest_lot.uuid!))),
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ParkingLotDetails(uuid: nearest_lot.uuid!, distance: nearest_lot.distance!,))),
                       child: Container(
                         decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 39, 39, 39),
