@@ -39,6 +39,7 @@ dependencies:
   http: ^1.2.0
   card_swiper: ^3.0.1
   lottie: ^3.0.0
+  mapbox_gl: ^0.16.0
 
 dev_dependencies:
   flutter_test:
