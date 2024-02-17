@@ -217,6 +217,39 @@ class SlotGuidelinesState extends State<SlotGuidelines> {
                                 slot.occupied!
                                     ? Column(
                                         children: [
+                                          SizedBox(height: 150),
+                                          InkWell(
+                                            onTap: () => Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        UserSessions())),
+                                            child: Container(
+                                              height: 45,
+                                              width: 0.35 * deviceWidth,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.blue[400],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25)),
+                                              child: const Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 8.0,
+                                                    horizontal: 16.0),
+                                                child: Text(
+                                                  "Park",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        children: [
                                           Lottie.asset(
                                               height: 150,
                                               "assets/driving.json"),
@@ -242,33 +275,6 @@ class SlotGuidelinesState extends State<SlotGuidelines> {
                                           )
                                         ],
                                       )
-                                    : Column(
-                                      children: [
-                                        SizedBox(height: 150),
-                                        InkWell(
-                                          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserSessions())),
-                                          child: Container(
-                                            height: 45,
-                                            width: 0.35 * deviceWidth,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue[400],
-                                              borderRadius: BorderRadius.circular(25)
-                                            ),
-                                            child: const Padding(
-                                              padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                                              child: Text(
-                                                "Park",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold
-                                                ),
-                                                ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
                               ],
                             ),
                           ),

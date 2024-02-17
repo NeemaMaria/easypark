@@ -190,7 +190,6 @@ class _UserSessionsState extends State<UserSessions> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // periodic fetching
     const apiCallInterval = Duration(seconds: 2);
@@ -224,7 +223,6 @@ class _UserSessionsState extends State<UserSessions> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _timer.cancel();
     super.dispose();
   }
@@ -341,8 +339,8 @@ class _UserSessionsState extends State<UserSessions> {
                   child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: DataTable(
-                          columns: [
-                            DataColumn(
+                          columns: const [
+                             DataColumn(
                                 label: Expanded(
                               child: Text("Parking Lot"),
                             )),
@@ -350,10 +348,6 @@ class _UserSessionsState extends State<UserSessions> {
                                 label: Expanded(
                               child: Text("Slot"),
                             )),
-                            // DataColumn(
-                            //     label: Expanded(
-                            //   child: Text("Date"),
-                            // )),
                             DataColumn(
                                 label: Expanded(
                               child: Text("Amount"),
@@ -363,7 +357,6 @@ class _UserSessionsState extends State<UserSessions> {
                             return DataRow(cells: [
                               DataCell(Text(session.lot)),
                               DataCell(Text(session.slot_number)),
-                              // DataCell(Text(session.parked_on.split(', ')[0])),
                               session.amount_accumulated != null
                                   ? DataCell(Text(
                                       session.amount_accumulated.toString()))
