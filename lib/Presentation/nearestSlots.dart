@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:easypark/Presentation/slotGuidelines.dart';
+import 'package:easypark/Presentation/slotMap.dart';
+import 'package:easypark/Services/Reservation.dart';
 import 'package:easypark/models/Slot.dart';
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
@@ -8,8 +11,9 @@ import "../variables.dart";
 
 class NearestSlots extends StatefulWidget {
   final String uuid;
+  final bool structured;
 
-  const NearestSlots({super.key, required this.uuid});
+  const NearestSlots({super.key, required this.uuid, required this.structured});
 
   @override
   State<NearestSlots> createState() => _NearestSlotsState();
@@ -27,6 +31,56 @@ class _NearestSlotsState extends State<NearestSlots> {
         Uri.parse("http://$server:8000/nearest_open_slots/${widget.uuid}/"));
     List json = jsonDecode(response.body) as List;
     return json.map((slot) => Slot.fromJson(slot)).toList();
+  }
+
+  Future<void> handleReservation() async {
+    int status_code = await Reservation.reserve_slot(selected!.uuid, user_id);
+    if (status_code == 200) {
+      // success and navigate
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Reservation Successfully booked",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.green,
+      ));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) =>
+              widget.structured ? SlotGuidelines() : SlotMap()));
+    } else {
+      // show error
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.red[400],
+              title: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Error",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  Icon(Icons.warning_amber_rounded, color: Colors.white)
+                ],
+              ),
+              content: const Text(
+                "This slot is nolonger available!",
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      "OK",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ))
+              ],
+            );
+          });
+    }
   }
 
   @override
@@ -108,6 +162,7 @@ class _NearestSlotsState extends State<NearestSlots> {
                     Expanded(child: SizedBox()),
                     InkWell(
                       onTap: () {
+                        handleReservation();
                         print("Booking slot ${selected!.slot_number}...");
                       },
                       child: Container(

@@ -14,6 +14,7 @@ class ParkingDetails {
   String? occupancy;
   int? free_slots;
   List? slots;
+  bool? structured;
 
   ParkingDetails({
     this.uuid,
@@ -29,6 +30,7 @@ class ParkingDetails {
     this.occupancy,
     this.free_slots,
     this.slots,
+    this.structured,
   });
 
   factory ParkingDetails.fromJson(Map<String, dynamic> json) {
@@ -45,7 +47,9 @@ class ParkingDetails {
         services_provided: json['services_provided'],
         occupancy: json['occupancy'],
         free_slots: freeSlots(json['occupancy']),
-        slots: json['slots'].map((slot) => Slot.fromJson(slot)).toList());
+        slots: json['slots'].map((slot) => Slot.fromJson(slot)).toList(),
+        structured: json['structured']
+        );
   }
 }
 

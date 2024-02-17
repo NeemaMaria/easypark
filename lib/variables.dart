@@ -5,3 +5,4 @@ String location_name = "Bunamwaya, Zzana";
 String server = "10.0.2.2";
 
 String user_id = "8ochLmsUgTIsJMVLFSIwKFkJTzWB";
+String user_name = "John";

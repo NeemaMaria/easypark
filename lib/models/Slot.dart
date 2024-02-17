@@ -1,4 +1,5 @@
 class Slot {
+  final String uuid;
   final String slot_number;
   double? latitude;
   double? longitude;
@@ -6,7 +7,8 @@ class Slot {
   final bool reserved;
 
   Slot(
-      {required this.slot_number,
+      {required this.uuid,
+      required this.slot_number,
       required this.occupied,
       required this.reserved,
       this.latitude,
@@ -14,9 +16,12 @@ class Slot {
 
   factory Slot.fromJson(Map<String, dynamic> json) {
     return Slot(
+        uuid: json['uuid'],
         slot_number: json['slot_number'],
-        latitude: json['latitude'] != null ? double.parse(json['latitude']) : null,
-        longitude: json['longitude'] != null ? double.parse(json['longitude']) : null,
+        latitude:
+            json['latitude'] != null ? double.parse(json['latitude']) : null,
+        longitude:
+            json['longitude'] != null ? double.parse(json['longitude']) : null,
         occupied: json['occupied'],
         reserved: json['reserved']);
   }

@@ -298,7 +298,7 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => NearestSlots(uuid: parking_lot.uuid!))),
+                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => NearestSlots(uuid: parking_lot.uuid!, structured: parking_lot.structured!,))),
                                     child: Container(
                                       height: 50,
                                       width: 0.42 * deviceWidth,

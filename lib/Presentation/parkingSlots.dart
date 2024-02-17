@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:easypark/Presentation/slotGuidelines.dart';
+import 'package:easypark/Presentation/slotMap.dart';
+import 'package:easypark/Services/Reservation.dart';
 import 'package:easypark/models/ParkingDetails.dart';
 import 'package:easypark/models/Slot.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +85,56 @@ class ParkingSlotsState extends State<ParkingSlots> {
     return resp;
   }
 
+  Future<void> handleReservation() async {
+    int status_code = await Reservation.reserve_slot(selected!.uuid, user_id);
+    if (status_code == 200) {
+      // success and navigate
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Reservation Successfully booked",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.green,
+      ));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) =>
+              parking_lot.structured! ? SlotGuidelines() : SlotMap()));
+    } else {
+      // show error
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.red[400],
+              title: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Error",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  Icon(Icons.warning_amber_rounded, color: Colors.white)
+                ],
+              ),
+              content: const Text(
+                "This slot is nolonger available!",
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      "OK",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ))
+              ],
+            );
+          });
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -93,6 +146,7 @@ class ParkingSlotsState extends State<ParkingSlots> {
       fetchDetails().then((value) {
         setState(() {
           parking_lot = value;
+          slots = displaySlots(0, 30);
         });
       });
     });
@@ -210,81 +264,107 @@ class ParkingSlotsState extends State<ParkingSlots> {
                                                   selected = slot;
                                                 });
                                                 showDialog(
-                                                  context: context, 
-                                                  builder: (BuildContext context) {
-                                                    return Dialog(
-                                                      child: Container(
-                                                        height: 150,
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.all(16.0),
-                                                          child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                            children: [
-                                                              Text(
-                                                                selected!.slot_number,
-                                                                style: TextStyle(
-                                                                  fontWeight: FontWeight.bold,
-                                                                  fontSize: 24,
-                                                                  color: Colors.grey[800]
-                                                                ),
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Dialog(
+                                                        child: Container(
+                                                          height: 150,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(16.0),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(
+                                                                  selected!
+                                                                      .slot_number,
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          24,
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          800]),
                                                                 ),
                                                                 Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
                                                                   children: [
                                                                     InkWell(
-                                                                      onTap: () => Navigator.pop(context),
-                                                                      child: Container(
-                                                                        width: 0.30 * deviceWidth,
-                                                                        alignment: Alignment.center,
+                                                                      onTap: () =>
+                                                                          Navigator.pop(
+                                                                              context),
+                                                                      child:
+                                                                          Container(
+                                                                        width: 0.30 *
+                                                                            deviceWidth,
+                                                                        alignment:
+                                                                            Alignment.center,
                                                                         decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.circular(10),
-                                                                          color: Colors.red[400]
-                                                                        ),
-                                                                        child: Padding(
-                                                                          padding: const EdgeInsets.all(10.0),
-                                                                          child: Text(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                            color: Colors.red[400]),
+                                                                        child:
+                                                                            const Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(10.0),
+                                                                          child:
+                                                                              Text(
                                                                             "Cancel",
-                                                                            style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontWeight: FontWeight.bold
-                                                                            ),
+                                                                            style:
+                                                                                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                                                           ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                     InkWell(
-                                                                      onTap: () => {
-                                                                        print("Booking slot ${selected!.slot_number}..."),
-                                                                        Navigator.pop(context)
+                                                                      onTap:
+                                                                          () =>
+                                                                              {
+                                                                        print(
+                                                                            "Booking slot ${selected!.slot_number}..."),
+                                                                        Navigator.pop(
+                                                                            context),
+                                                                        handleReservation(),
                                                                       },
-                                                                      child: Container(
-                                                                        width: 0.30 * deviceWidth,
-                                                                        alignment: Alignment.center,
+                                                                      child:
+                                                                          Container(
+                                                                        width: 0.30 *
+                                                                            deviceWidth,
+                                                                        alignment:
+                                                                            Alignment.center,
                                                                         decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.circular(10),
-                                                                          color: Colors.green[500]
-                                                                        ),
-                                                                        child: Padding(
-                                                                          padding: const EdgeInsets.all(10.0),
-                                                                          child: Text(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                            color: Colors.green[500]),
+                                                                        child:
+                                                                            const Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(10.0),
+                                                                          child:
+                                                                              Text(
                                                                             "Reserve",
-                                                                            style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontWeight: FontWeight.bold
-                                                                            ),
+                                                                            style:
+                                                                                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                                                           ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ],
                                                                 )
-                                                            ],
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    );
-                                                  }
-                                                  );
+                                                      );
+                                                    });
                                               },
                                         child: Container(
                                             decoration: BoxDecoration(
