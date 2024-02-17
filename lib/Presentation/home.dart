@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:easypark/Presentation/parkingLotDetails.dart';
+import 'package:easypark/Presentation/userSessions.dart';
 import 'package:easypark/models/ParkingLot.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -161,6 +162,21 @@ class _homeState extends State<home> {
                                     ),
                                   ],
                                 ),
+                                Expanded(child: SizedBox()),
+                                InkWell(
+                                  onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserSessions())),
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      image: const DecorationImage(
+                                        image: AssetImage("assets/profile.jpg"),
+                                        fit: BoxFit.cover
+                                        )
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                           ),

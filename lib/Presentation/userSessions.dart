@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:easypark/Presentation/home.dart';
 import 'package:easypark/models/ParkingSession.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -231,6 +232,10 @@ class _UserSessionsState extends State<UserSessions> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => home())),
+          icon: Icon(Icons.arrow_back),
+        ),
         title: Text("My Sessions"),
       ),
       body: Padding(

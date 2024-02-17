@@ -339,8 +339,8 @@ class ParkingSlotsState extends State<ParkingSlots> {
                                                                             "Booking slot ${selected!.slot_number}..."),
                                                                         Navigator.pop(
                                                                             context),
-                                                                        // handleReservation(),
-                                                                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SlotGuidelines(uuid: selected!.uuid!)))
+                                                                        handleReservation(),
+                                                                        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => SlotGuidelines(uuid: selected!.uuid!)))
                                                                       },
                                                                       child:
                                                                           Container(

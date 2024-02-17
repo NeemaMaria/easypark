@@ -45,6 +45,45 @@ class SlotGuidelinesState extends State<SlotGuidelines> {
     return [arr[0][2], arr[1]];
   }
 
+  Future<void> park() async {
+    var response = await http.post(Uri.parse(
+        "http://$server:8000/park_in_slot/${parking_lot.uuid}/${slot.uuid}/$user_id/"));
+    if (response.statusCode == 200) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => UserSessions()));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green[500],
+          content: const Text("Parking Session Active")));
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.red[400],
+              title: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Error",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  Icon(Icons.warning_amber_rounded, color: Colors.white)
+                ],
+              ),
+              content: const Text(
+                "Something went wrong. Try again!",
+                style: TextStyle(color: Colors.white),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context), child: Text("OK", style: TextStyle(color: Colors.white)))
+              ],
+            );
+          });
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -219,10 +258,7 @@ class SlotGuidelinesState extends State<SlotGuidelines> {
                                         children: [
                                           SizedBox(height: 150),
                                           InkWell(
-                                            onTap: () => Navigator.of(context)
-                                                .push(MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        UserSessions())),
+                                            onTap: () => park(),
                                             child: Container(
                                               height: 45,
                                               width: 0.35 * deviceWidth,
