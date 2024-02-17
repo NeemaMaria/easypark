@@ -6,3 +6,5 @@ String server = "10.0.2.2";
 
 String user_id = "xDI14RQJa6r2Wq8Y0jgp99wVMMfs";
 String user_name = "John";
+
+String slot_id = "a132d18f-d807-450b-bdb2-4b35780ff181";

@@ -105,7 +105,7 @@ class ParkingSlotsState extends State<ParkingSlots> {
       ));
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) =>
-              parking_lot.structured! ? SlotGuidelines(uuid: selected!.uuid!) : SlotMap()));
+              parking_lot.structured! ? SlotGuidelines(uuid: selected!.uuid!) : SlotMap(uuid: selected!.uuid!)));
     } else {
       // show error
       showDialog(

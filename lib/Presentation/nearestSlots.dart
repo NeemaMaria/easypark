@@ -46,7 +46,7 @@ class _NearestSlotsState extends State<NearestSlots> {
       ));
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) =>
-              widget.structured ? SlotGuidelines(uuid: selected!.uuid!) : SlotMap()));
+              widget.structured ? SlotGuidelines(uuid: selected!.uuid!) : SlotMap(uuid: selected!.uuid!)));
     } else {
       // show error
       showDialog(

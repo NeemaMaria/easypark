@@ -1,6 +1,7 @@
 import 'package:easypark/Presentation/home.dart';
-import 'package:easypark/Presentation/userSessions.dart';
+import 'package:easypark/Presentation/slotMap.dart';
 import 'package:flutter/material.dart';
+import './variables.dart';
 
 void main() {
   runApp(const EasyPark());
@@ -16,10 +17,10 @@ class EasyPark extends StatefulWidget {
 class _EasyParkState extends State<EasyPark> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: "Easy Park",
       debugShowCheckedModeBanner: false,
-      home: home()
+      home: SlotMap(uuid: slot_id)
     );
   }
 }

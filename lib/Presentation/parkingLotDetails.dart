@@ -287,8 +287,8 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                                           color: Colors.blue[600],
                                           borderRadius:
                                               BorderRadius.circular(25)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
                                             vertical: 8.0, horizontal: 12.0),
                                         child: Text(
                                           "View Lot",
@@ -307,11 +307,11 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                                           color: Colors.green[600],
                                           borderRadius:
                                               BorderRadius.circular(25)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
                                             vertical: 8.0, horizontal: 12.0),
                                         child: Text(
-                                          "Reserve slot",
+                                          "Nearest slot",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
