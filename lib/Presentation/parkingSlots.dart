@@ -37,7 +37,14 @@ class ParkingSlotsState extends State<ParkingSlots> {
   }
 
   List displaySlots(start, end) {
-    return parking_lot.slots!.sublist(start, end);
+    List slots = [];
+    try {
+      slots = parking_lot.slots!.sublist(start, end);
+    } on RangeError {
+      int len = parking_lot.slots!.length;
+      slots = parking_lot.slots!.sublist(start, len);
+    }
+    return slots;
   }
 
   List<Widget> levels(value) {

@@ -148,7 +148,7 @@ class _NearestSlotsState extends State<NearestSlots> {
                     SizedBox(height: 20),
                     Text(
                       parking_slots[index].slot_number,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.white
