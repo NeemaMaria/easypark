@@ -1,16 +1,16 @@
 class Slot {
-  final String uuid;
-  final String slot_number;
+  String? uuid;
+  String? slot_number;
   double? latitude;
   double? longitude;
-  final bool occupied;
-  final bool reserved;
+  bool? occupied;
+  bool? reserved;
 
   Slot(
-      {required this.uuid,
-      required this.slot_number,
-      required this.occupied,
-      required this.reserved,
+      {this.uuid,
+      this.slot_number,
+      this.occupied,
+      this.reserved,
       this.latitude,
       this.longitude});
 
