@@ -3,7 +3,7 @@ import 'package:easypark/Presentation/slotMap.dart';
 import 'package:flutter/material.dart';
 import './variables.dart';
 
-void main() {
+void main() async {
   runApp(const EasyPark());
 }
 

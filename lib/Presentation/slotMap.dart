@@ -22,8 +22,15 @@ class _SlotMapState extends State<SlotMap> {
 
   late CameraPosition _initialCameraPosition;
   late MapboxMapController controller;
-
   LatLng currentLatLng = LatLng(lat, lon);
+
+  _onMapCreated(MapboxMapController controller) async {
+    this.controller = controller;
+  }
+
+  _onStyleLoadedCallback() {
+
+  }
 
   Future<Slot> slotDetails() async {
     var response = await http
@@ -60,6 +67,30 @@ class _SlotMapState extends State<SlotMap> {
       appBar: AppBar(
         title: Text("Slot Map"),
       ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            SizedBox(
+              height: 0.9 * MediaQuery.of(context).size.height,
+              child: MapboxMap(
+                accessToken: secret_token,
+                initialCameraPosition: _initialCameraPosition,
+                onMapCreated: _onMapCreated,
+                onStyleLoadedCallback: _onStyleLoadedCallback,
+                myLocationEnabled: true,
+                myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+                minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+                ),
+            )
+          ],
+        )
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            controller.animateCamera(CameraUpdate.newCameraPosition(_initialCameraPosition));
+          },
+          child: const Icon(Icons.my_location),
+          ),
     );
   }
 }
