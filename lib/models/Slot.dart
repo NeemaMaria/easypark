@@ -1,5 +1,6 @@
 class Slot {
   String? uuid;
+  String? parking_lot;
   String? slot_number;
   double? latitude;
   double? longitude;
@@ -8,6 +9,7 @@ class Slot {
 
   Slot(
       {this.uuid,
+      this.parking_lot,
       this.slot_number,
       this.occupied,
       this.reserved,
@@ -17,6 +19,7 @@ class Slot {
   factory Slot.fromJson(Map<String, dynamic> json) {
     return Slot(
         uuid: json['uuid'],
+        parking_lot: json['parking_lot'],
         slot_number: json['slot_number'],
         latitude:
             json['latitude'] != null ? double.parse(json['latitude']) : null,

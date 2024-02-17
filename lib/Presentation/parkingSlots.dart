@@ -105,7 +105,7 @@ class ParkingSlotsState extends State<ParkingSlots> {
       ));
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) =>
-              parking_lot.structured! ? SlotGuidelines(uuid: selected!.uuid) : SlotMap()));
+              parking_lot.structured! ? SlotGuidelines(uuid: selected!.uuid!) : SlotMap()));
     } else {
       // show error
       showDialog(
@@ -288,7 +288,7 @@ class ParkingSlotsState extends State<ParkingSlots> {
                                                               children: [
                                                                 Text(
                                                                   selected!
-                                                                      .slot_number,
+                                                                      .slot_number!,
                                                                   style: TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
@@ -340,7 +340,7 @@ class ParkingSlotsState extends State<ParkingSlots> {
                                                                         Navigator.pop(
                                                                             context),
                                                                         // handleReservation(),
-                                                                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SlotGuidelines(uuid: selected!.uuid)))
+                                                                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SlotGuidelines(uuid: selected!.uuid!)))
                                                                       },
                                                                       child:
                                                                           Container(

@@ -46,7 +46,7 @@ class _NearestSlotsState extends State<NearestSlots> {
       ));
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) =>
-              widget.structured ? SlotGuidelines() : SlotMap()));
+              widget.structured ? SlotGuidelines(uuid: selected!.uuid!) : SlotMap()));
     } else {
       // show error
       showDialog(
@@ -147,7 +147,7 @@ class _NearestSlotsState extends State<NearestSlots> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      parking_slots[index].slot_number,
+                      parking_slots[index].slot_number!,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
