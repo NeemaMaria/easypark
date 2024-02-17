@@ -58,7 +58,7 @@ class _SlotMapState extends State<SlotMap> {
       });
     });
     // location details
-    _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 15);
+    _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 16);
   }
 
   @override
