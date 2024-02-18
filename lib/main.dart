@@ -16,20 +16,20 @@ class EasyPark extends StatefulWidget {
 }
 
 class _EasyParkState extends State<EasyPark> {
-
   @override
   void initState() {
     super.initState();
-    handleLocationPermissions();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      handleLocationPermissions();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Easy Park",
-      debugShowCheckedModeBanner: false,
-      home: SlotMap(uuid: slot_id)
-    );
+        title: "Easy Park",
+        debugShowCheckedModeBanner: false,
+        home: SlotMap(uuid: slot_id));
   }
 }
 
