@@ -361,11 +361,11 @@ class _homeState extends State<home> {
                           style: TextStyle(
                             color: Color.fromARGB(255, 10, 2, 2),
                             fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                          )),
+                        ],
+                      ),
                     ),
-                  ),
+                  
                   Padding(
                       padding:
                           EdgeInsets.all(10.0), // Adjust the padding as needed
