@@ -41,7 +41,7 @@ dependencies:
   lottie: ^3.0.0
   mapbox_gl: ^0.16.0
   dio: ^5.4.0
-  location: ^5.0.3
+  location: ^4.0.3
 
 dev_dependencies:
   flutter_test:
