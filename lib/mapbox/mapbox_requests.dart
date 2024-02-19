@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 import './dio_exceptions.dart';
-import "../variables.dart";
 
 String baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
-String accessToken = secret_token;
+String accessToken = dotenv.env['MAPBOX_SECRET_TOKEN']!;
 String navType = 'driving';
 
 Dio _dio = Dio();

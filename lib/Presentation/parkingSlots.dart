@@ -6,7 +6,7 @@ import 'package:easypark/Services/Reservation.dart';
 import 'package:easypark/models/ParkingDetails.dart';
 import 'package:easypark/models/Slot.dart';
 import 'package:flutter/material.dart';
-import "../variables.dart";
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
 
 class ParkingSlots extends StatefulWidget {
@@ -31,7 +31,7 @@ class ParkingSlotsState extends State<ParkingSlots> {
 
   Future<ParkingDetails> fetchDetails() async {
     var response = await http.get(
-        Uri.parse("http://$server:8000/parking_lot_details/${widget.uuid}/"));
+        Uri.parse("http://${dotenv.env['SERVER']}:8000/parking_lot_details/${widget.uuid}/"));
     var json = jsonDecode(response.body);
     return ParkingDetails.fromJson(json);
   }
@@ -93,7 +93,7 @@ class ParkingSlotsState extends State<ParkingSlots> {
   }
 
   Future<void> handleReservation() async {
-    int status_code = await Reservation.reserve_slot(selected!.uuid, user_id);
+    int status_code = await Reservation.reserve_slot(selected!.uuid, dotenv.env['USER_ID']);
     if (status_code == 200) {
       // success and navigate
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

@@ -5,9 +5,9 @@ import 'package:easypark/models/ParkingDetails.dart';
 import 'package:easypark/models/ParkingGraphic.dart';
 import 'package:easypark/models/Slot.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lottie/lottie.dart';
 import "package:http/http.dart" as http;
-import "../variables.dart";
 
 class SlotGuidelines extends StatefulWidget {
   final String uuid;
@@ -28,14 +28,14 @@ class SlotGuidelinesState extends State<SlotGuidelines> {
 
   Future<Slot> fetchDetails() async {
     var response = await http
-        .get(Uri.parse("http://$server:8000/slot_details/${widget.uuid}/"));
+        .get(Uri.parse("http://${dotenv.env['SERVER']}:8000/slot_details/${widget.uuid}/"));
     var json = jsonDecode(response.body);
     return Slot.fromJson(json);
   }
 
   Future<ParkingDetails> fetchParkingDetails(uuid) async {
     var response = await http
-        .get(Uri.parse("http://$server:8000/parking_lot_details/$uuid/"));
+        .get(Uri.parse("http://${dotenv.env['SERVER']}:8000/parking_lot_details/$uuid/"));
     var json = jsonDecode(response.body);
     return ParkingDetails.fromJson(json);
   }
@@ -47,7 +47,7 @@ class SlotGuidelinesState extends State<SlotGuidelines> {
 
   Future<void> park() async {
     var response = await http.post(Uri.parse(
-        "http://$server:8000/park_in_slot/${parking_lot.uuid}/${slot.uuid}/$user_id/"));
+        "http://${dotenv.env['SERVER']}:8000/park_in_slot/${parking_lot.uuid}/${slot.uuid}/${dotenv.env['USER_ID']}/"));
     if (response.statusCode == 200) {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => UserSessions()));
@@ -138,7 +138,7 @@ class SlotGuidelinesState extends State<SlotGuidelines> {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage(
-                                "http://$server:8000${parking_lot.image_url}"),
+                                "http://${dotenv.env['SERVER']}:8000${parking_lot.image_url}"),
                             fit: BoxFit.cover)),
                   ),
                   Column(

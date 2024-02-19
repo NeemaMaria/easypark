@@ -4,10 +4,10 @@ import 'package:easypark/mapbox/directions_handler.dart';
 import 'package:easypark/models/ParkingDetails.dart';
 import 'package:easypark/models/Slot.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
 import 'package:lottie/lottie.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import "../variables.dart";
 
 class SlotMap extends StatefulWidget {
   final String uuid;
@@ -25,7 +25,7 @@ class _SlotMapState extends State<SlotMap> {
 
   late CameraPosition _initialCameraPosition;
   late MapboxMapController controller;
-  LatLng currentLatLng = LatLng(lat, lon);
+  LatLng currentLatLng = LatLng(double.parse(dotenv.env['LAT']!), double.parse(dotenv.env['LON']!));
   late CameraPosition slotPosition; // the parking slot
   Map? modifiedMap;
 
@@ -76,21 +76,21 @@ class _SlotMapState extends State<SlotMap> {
 
   Future<Slot> slotDetails() async {
     var response = await http
-        .get(Uri.parse("http://$server:8000/slot_details/${widget.uuid}/"));
+        .get(Uri.parse("http://${dotenv.env['SERVER']}:8000/slot_details/${widget.uuid}/"));
     var json = jsonDecode(response.body);
     return Slot.fromJson(json);
   }
 
   Future<ParkingDetails> parkingDetails(uuid) async {
     var response = await http
-        .get(Uri.parse("http://$server:8000/parking_lot_details/$uuid/"));
+        .get(Uri.parse("http://${dotenv.env['SERVER']}:8000/parking_lot_details/$uuid/"));
     var json = jsonDecode(response.body);
     return ParkingDetails.fromJson(json);
   }
 
   Future<void> park() async {
     var response = await http.post(Uri.parse(
-        "http://$server:8000/park_in_slot/${parking_lot.uuid}/${slot.uuid}/$user_id/"));
+        "http://${dotenv.env['SERVER']}:8000/park_in_slot/${parking_lot.uuid}/${slot.uuid}/${dotenv.env['USER_ID']}/"));
     if (response.statusCode == 200) {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => UserSessions()));
@@ -169,7 +169,7 @@ class _SlotMapState extends State<SlotMap> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
                   child: MapboxMap(
-                    accessToken: secret_token,
+                    accessToken: dotenv.env['MAPBOX_SECRET_TOKEN'],
                     initialCameraPosition: _initialCameraPosition,
                     onMapCreated: _onMapCreated,
                     onStyleLoadedCallback: _onStyleLoadedCallback,

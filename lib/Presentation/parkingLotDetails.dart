@@ -3,7 +3,7 @@ import 'package:easypark/Presentation/nearestSlots.dart';
 import 'package:easypark/Presentation/parkingSlots.dart';
 import 'package:easypark/models/ParkingDetails.dart';
 import 'package:flutter/material.dart';
-import "../variables.dart";
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
 
 class ParkingLotDetails extends StatefulWidget {
@@ -23,7 +23,7 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
 
   Future<ParkingDetails> fetchData() async {
     var response = await http.get(
-        Uri.parse("http://$server:8000/parking_lot_details/${widget.uuid}/"));
+        Uri.parse("http://${dotenv.env['SERVER']}:8000/parking_lot_details/${widget.uuid}/"));
     var jsonObj = jsonDecode(response.body);
     return ParkingDetails.fromJson(jsonObj);
   }
@@ -56,7 +56,7 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage(
-                                "http://$server:8000${parking_lot.image_url}/"),
+                                "http://${dotenv.env['SERVER']}:8000${parking_lot.image_url}/"),
                             fit: BoxFit.cover)),
                   ),
                   Column(

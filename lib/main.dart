@@ -1,10 +1,11 @@
 import 'package:easypark/Presentation/home.dart';
 import 'package:easypark/Presentation/slotMap.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:location/location.dart';
-import './variables.dart';
 
-void main() async {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const EasyPark());
 }
 
@@ -29,7 +30,8 @@ class _EasyParkState extends State<EasyPark> {
     return MaterialApp(
         title: "Easy Park",
         debugShowCheckedModeBanner: false,
-        home: SlotMap(uuid: slot_id));
+        // home: SlotMap(uuid: dotenv.env['SLOT_ID']!));
+        home: home());
   }
 }
 

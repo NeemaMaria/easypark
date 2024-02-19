@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
-import "../variables.dart";
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -26,6 +26,10 @@ class _homeState extends State<home> {
   bool loading = true;
 
   Future<List<ParkingLot>> fetchData() async {
+    String server = dotenv.env['SERVER']!;
+    double lat = double.parse(dotenv.env['LAT']!);
+    double lon = double.parse(dotenv.env['LON']!);
+
     var response = await http
         .get(Uri.parse("http://$server:8000/nearest_parking_lots/$lat/$lon/"));
     List lots = jsonDecode(response.body) as List;
@@ -70,7 +74,7 @@ class _homeState extends State<home> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
                   image: DecorationImage(
-                      image: NetworkImage("http://$server:8000${lot.image_url}/"),
+                      image: NetworkImage("http://${dotenv.env['SERVER']}:8000${lot.image_url}/"),
                       fit: BoxFit.cover)),
             ),
             const SizedBox(
@@ -154,7 +158,7 @@ class _homeState extends State<home> {
                                             color: Color.fromARGB(
                                                 255, 218, 218, 218))),
                                     Text(
-                                      location_name,
+                                      dotenv.env['LOCATION_NAME']!,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Color.fromARGB(

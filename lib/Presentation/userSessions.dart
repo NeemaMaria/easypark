@@ -5,7 +5,7 @@ import 'package:easypark/models/ParkingSession.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../variables.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class UserSessions extends StatefulWidget {
@@ -24,7 +24,7 @@ class _UserSessionsState extends State<UserSessions> {
 
   Future<List<ParkingSession>> fetchUserSessions() async {
     var tmp = await http
-        .get(Uri.parse("http://$server:8000/user_sessions/$user_id/"));
+        .get(Uri.parse("http://${dotenv.env['SERVER']}:8000/user_sessions/${dotenv.env['USER_ID']}/"));
     List response = jsonDecode(tmp.body) as List;
     return response
         .map((session) =>
@@ -184,7 +184,7 @@ class _UserSessionsState extends State<UserSessions> {
 
   Future<void> terminate_session() async {
     var response = await http.post(Uri.parse(
-        "http://$server:8000/release_slot/${active_session!.lot_uuid}/${active_session!.slot}/$user_id/"));
+        "http://${dotenv.env['SERVER']}:8000/release_slot/${active_session!.lot_uuid}/${active_session!.slot}/${dotenv.env['USER_ID']}/"));
     var message = jsonDecode(response.body);
     show_message(response.statusCode, message);
   }

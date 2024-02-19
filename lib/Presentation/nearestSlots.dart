@@ -6,8 +6,8 @@ import 'package:easypark/Presentation/slotMap.dart';
 import 'package:easypark/Services/Reservation.dart';
 import 'package:easypark/models/Slot.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
-import "../variables.dart";
 
 class NearestSlots extends StatefulWidget {
   final String uuid;
@@ -28,13 +28,13 @@ class _NearestSlotsState extends State<NearestSlots> {
 
   Future<List<Slot>> fetchSlots() async {
     var response = await http.get(
-        Uri.parse("http://$server:8000/nearest_open_slots/${widget.uuid}/"));
+        Uri.parse("http://${dotenv.env['SERVER']}:8000/nearest_open_slots/${widget.uuid}/"));
     List json = jsonDecode(response.body) as List;
     return json.map((slot) => Slot.fromJson(slot)).toList();
   }
 
   Future<void> handleReservation() async {
-    int status_code = await Reservation.reserve_slot(selected!.uuid, user_id);
+    int status_code = await Reservation.reserve_slot(selected!.uuid, dotenv.env['USER_ID']);
     if (status_code == 200) {
       // success and navigate
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
