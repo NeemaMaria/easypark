@@ -1,5 +1,8 @@
 import 'package:easypark/Presentation/home.dart';
+import 'package:easypark/Presentation/login_page.dart';
+import 'package:easypark/Presentation/signup_page.dart';
 import 'package:easypark/Presentation/slotMap.dart';
+import 'package:easypark/Presentation/userSessions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:location/location.dart';
@@ -28,10 +31,18 @@ class _EasyParkState extends State<EasyPark> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Easy Park",
-        debugShowCheckedModeBanner: false,
-        // home: SlotMap(uuid: dotenv.env['SLOT_ID']!));
-        home: home());
+      title: "Easy Park",
+      debugShowCheckedModeBanner: false,
+      // home: SlotMap(uuid: dotenv.env['SLOT_ID']!));
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginPage(),
+        '/home': (context) => const home(),
+        '/signup': (context) => SignUpPage(),
+        '/user_sessions': (context) => UserSessions(),
+        // Add more routes as needed
+      },
+    );
   }
 }
 

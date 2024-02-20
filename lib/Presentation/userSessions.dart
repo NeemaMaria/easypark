@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:easypark/Presentation/home.dart';
+import 'package:easypark/Presentation/login_page.dart';
 import 'package:easypark/models/ParkingSession.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,8 @@ class _UserSessionsState extends State<UserSessions> {
   ParkingSession? active_session;
 
   Future<List<ParkingSession>> fetchUserSessions() async {
-    var tmp = await http
-        .get(Uri.parse("http://${dotenv.env['SERVER']}:8000/user_sessions/${dotenv.env['USER_ID']}/"));
+    var tmp = await http.get(Uri.parse(
+        "http://${dotenv.env['SERVER']}:8000/user_sessions/${dotenv.env['USER_ID']}/"));
     List response = jsonDecode(tmp.body) as List;
     return response
         .map((session) =>
@@ -233,9 +234,16 @@ class _UserSessionsState extends State<UserSessions> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => home())),
+          onPressed: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => home())),
           icon: Icon(Icons.arrow_back),
         ),
+        actions: [
+          IconButton(
+              onPressed: () =>
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage())),
+              icon: Icon(Icons.logout))
+        ],
         title: Text("My Sessions"),
       ),
       body: Padding(
@@ -345,7 +353,7 @@ class _UserSessionsState extends State<UserSessions> {
                       padding: EdgeInsets.all(8.0),
                       child: DataTable(
                           columns: const [
-                             DataColumn(
+                            DataColumn(
                                 label: Expanded(
                               child: Text("Parking Lot"),
                             )),
