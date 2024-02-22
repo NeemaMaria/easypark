@@ -37,6 +37,7 @@ class _EasyParkState extends State<EasyPark> {
       initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
+        // '/': (context) => SlotMap(uuid: dotenv.env['SLOT_ID']!),
         '/home': (context) => const home(),
         '/signup': (context) => SignUpPage(),
         '/user_sessions': (context) => UserSessions(),

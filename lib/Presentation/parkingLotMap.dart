@@ -19,6 +19,8 @@ class ParkingLotMap extends StatefulWidget {
 class _ParkingLotMapState extends State<ParkingLotMap> {
   GoogleMapController? mapController;
 
+  MapType _mapType = MapType.normal;
+
   // user location
   // Location location = Location();
   // LocationData? userLocation;
@@ -37,6 +39,13 @@ class _ParkingLotMapState extends State<ParkingLotMap> {
         position: LatLng(widget.lat, widget.lon),
         infoWindow: InfoWindow(title: widget.name),
       ));
+      markers.add(Marker(
+          markerId: MarkerId("User Location"),
+          position: LatLng(double.parse(dotenv.env['LAT']!),
+              double.parse(dotenv.env['LON']!)),
+          infoWindow: InfoWindow(title: "My Location"),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueGreen)));
     });
   }
 
@@ -79,10 +88,10 @@ class _ParkingLotMapState extends State<ParkingLotMap> {
                       height: deviceHeight,
                       child: GoogleMap(
                         onMapCreated: _onMapCreated,
-                        myLocationButtonEnabled: true,
+                        myLocationButtonEnabled: false,
                         myLocationEnabled: true,
-                        compassEnabled: true,
-                        mapType: MapType.normal,
+                        compassEnabled: false,
+                        mapType: _mapType,
                         polylines: polylines,
                         initialCameraPosition: CameraPosition(
                             target: LatLng(
@@ -126,6 +135,26 @@ class _ParkingLotMapState extends State<ParkingLotMap> {
                                       fontSize: 18),
                                 ),
                               ),
+                            ),
+                            Expanded(
+                              child: SizedBox(),
+                            ),
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.green[400],
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _mapType = _mapType == MapType.normal
+                                          ? MapType.satellite
+                                          : MapType.normal;
+                                    });
+                                  },
+                                  icon: Icon(Icons.flip_to_front_outlined,
+                                      color: Colors.white)),
                             ),
                           ],
                         ),

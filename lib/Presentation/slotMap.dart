@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:easypark/Presentation/userSessions.dart';
+import 'package:easypark/google/directions_handler.dart';
 import 'package:easypark/models/ParkingDetails.dart';
 import 'package:easypark/models/Slot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import "package:http/http.dart" as http;
-import 'package:lottie/lottie.dart';
+import 'package:lottie/lottie.dart' as lottie;
 
 class SlotMap extends StatefulWidget {
   final String uuid;
@@ -19,69 +21,56 @@ class _SlotMapState extends State<SlotMap> {
   Slot slot = Slot();
   ParkingDetails parking_lot = ParkingDetails();
 
+  GoogleMapController? mapController;
+
+  MapType _mapType =  MapType.normal;
+
+  // user location
+  // Location location = Location();
+  // LocationData? userLocation;
+
+  Set<Marker> markers = {};
+
+  Set<Polyline> polylines = {};
+
   bool loading = true;
 
-  // late CameraPosition _initialCameraPosition;
-  // late MapboxMapController controller;
-  // LatLng currentLatLng = LatLng(double.parse(dotenv.env['LAT']!), double.parse(dotenv.env['LON']!));
-  // late CameraPosition slotPosition; // the parking slot
-  // Map? modifiedMap;
+  void _onMapCreated(GoogleMapController controller) async {
+    mapController = controller;
+    setState(() {
+      markers.add(Marker(
+        markerId: MarkerId(parking_lot.name!),
+        position: LatLng(slot.latitude!, slot.longitude!),
+        infoWindow: InfoWindow(title: parking_lot.name!),
+      ));
+      markers.add(Marker(
+        markerId: MarkerId("User Location"),
+        position: LatLng(double.parse(dotenv.env['LAT']!),
+                double.parse(dotenv.env['LON']!)),
+        infoWindow: InfoWindow(title: "My Location"),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)
+      ));
+    });
+  }
 
-  // _onMapCreated(MapboxMapController controller) async {
-  //   this.controller = controller;
-  // }
-
-  // _addSourceAndLineLayer() async {
-  //   // Can animate camera to focus on the item
-  //   controller.animateCamera(CameraUpdate.newCameraPosition(slotPosition));
-
-  //   // Add a polyLine between source and destination
-  //   Map geometry = modifiedMap!["geometry"]; // slot geometry details
-  //   final _fills = {
-  //     "type": "FeatureCollection",
-  //     "features": [
-  //       {
-  //         "type": "Feature",
-  //         "id": 0,
-  //         "properties": <String, dynamic>{},
-  //         "geometry": geometry,
-  //       },
-  //     ],
-  //   };
-
-  //   // Add new source and lineLayer
-  //   await controller.addSource("fills", GeojsonSourceProperties(data: _fills));
-  //   await controller.addLineLayer(
-  //     "fills",
-  //     "lines",
-  //     LineLayerProperties(
-  //       lineColor: Colors.green.toHexStringRGB(),
-  //       lineCap: "round",
-  //       lineJoin: "round",
-  //       lineWidth: 2,
-  //     ),
-  //   );
-  // }
-
-  // _onStyleLoadedCallback() async {
-  //   controller.addSymbol(SymbolOptions(
-  //       geometry: LatLng(slot.latitude!, slot.longitude!),
-  //       iconSize: 0.2,
-  //       iconImage: "assets/icon.png"));
-
-  //   _addSourceAndLineLayer();
+  // if we want to base off the user's location
+  // Future<void> _getUserLocation() async {
+  //   final user_location = await location.getLocation();
+  //   setState(() {
+  //     userLocation = user_location;
+  //   });
   // }
 
   Future<Slot> slotDetails() async {
-    var response = await http
-        .get(Uri.parse("http://${dotenv.env['SERVER']}:8000/slot_details/${widget.uuid}/"));
+    var response = await http.get(Uri.parse(
+        "http://${dotenv.env['SERVER']}:8000/slot_details/${widget.uuid}/"));
     var json = jsonDecode(response.body);
     return Slot.fromJson(json);
   }
 
   Future<ParkingDetails> parkingDetails(uuid) async {
-    var response = await http
-        .get(Uri.parse("http://${dotenv.env['SERVER']}:8000/parking_lot_details/$uuid/"));
+    var response = await http.get(Uri.parse(
+        "http://${dotenv.env['SERVER']}:8000/parking_lot_details/$uuid/"));
     var json = jsonDecode(response.body);
     return ParkingDetails.fromJson(json);
   }
@@ -129,7 +118,6 @@ class _SlotMapState extends State<SlotMap> {
   @override
   void initState() {
     super.initState();
-    // _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 16);
     slotDetails().then((value) {
       setState(() {
         slot = value;
@@ -137,16 +125,17 @@ class _SlotMapState extends State<SlotMap> {
       parkingDetails(slot.parking_lot!).then((value) {
         parking_lot = value;
       });
-
-      // location details
-      // getDirectionsAPIResponse(currentLatLng, slot.latitude!, slot.longitude!)
-      //     .then((value) {
-      //   setState(() {
-      //     modifiedMap = value;
-      //   });
-      // });
-      // slotPosition = CameraPosition(
-      //     target: LatLng(slot.latitude!, slot.longitude!), zoom: 15);
+      getDirectionsAPIResponse(
+              LatLng(double.parse(dotenv.env['LAT']!),
+                  double.parse(dotenv.env['LON']!)),
+              slot.latitude!,
+              slot.longitude!)
+          .then((value) {
+        setState(() {
+          polylines = value;
+          loading = false;
+        });
+      });
       setState(() {
         loading = false;
       });
@@ -166,15 +155,21 @@ class _SlotMapState extends State<SlotMap> {
               children: [
                 SizedBox(
                   height: deviceHeight,
-                  // child: MapboxMap(
-                  //   accessToken: dotenv.env['MAPBOX_SECRET_TOKEN'],
-                  //   initialCameraPosition: _initialCameraPosition,
-                  //   onMapCreated: _onMapCreated,
-                  //   onStyleLoadedCallback: _onStyleLoadedCallback,
-                  //   myLocationEnabled: true,
-                  //   myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                  //   minMaxZoomPreference: const MinMaxZoomPreference(10, 20),
-                  // ),
+                  child: GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    myLocationButtonEnabled: false,
+                    myLocationEnabled: true,
+                    compassEnabled: false,
+                    mapType: _mapType,
+                    polylines: polylines,
+                    initialCameraPosition: CameraPosition(
+                        target: LatLng(
+                          double.parse(dotenv.env['LAT']!),
+                          double.parse(dotenv.env['LON']!),
+                        ),
+                        zoom: 12),
+                    markers: markers,
+                  ),
                 ),
                 Column(children: [
                   SizedBox(height: 0.01 * deviceHeight),
@@ -209,6 +204,24 @@ class _SlotMapState extends State<SlotMap> {
                                   fontSize: 18),
                             ),
                           ),
+                        ),
+                        Expanded(
+                          child: SizedBox(),
+                        ),
+                        Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                              color: Colors.green[400],
+                              borderRadius: BorderRadius.circular(100)),
+                          child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _mapType = _mapType == MapType.normal ? MapType.satellite : MapType.normal;
+                                });
+                              },
+                              icon:
+                                  Icon(Icons.flip_to_front_outlined, color: Colors.white)),
                         ),
                       ],
                     ),
@@ -248,7 +261,8 @@ class _SlotMapState extends State<SlotMap> {
                           padding: const EdgeInsets.only(bottom: 20.0),
                           child: Column(
                             children: [
-                              Lottie.asset(height: 100, "assets/driving.json"),
+                              lottie.Lottie.asset(
+                                  height: 100, "assets/driving.json"),
                               SizedBox(height: 16.0),
                               InkWell(
                                 child: Container(
@@ -271,13 +285,6 @@ class _SlotMapState extends State<SlotMap> {
                 ])
               ],
             )),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     controller.animateCamera(
-      //         CameraUpdate.newCameraPosition(_initialCameraPosition));
-      //   },
-      //   child: const Icon(Icons.my_location),
-      // ),
     );
   }
 }
