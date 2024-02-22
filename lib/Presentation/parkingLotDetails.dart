@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:easypark/Presentation/nearestSlots.dart';
+import 'package:easypark/Presentation/parkingLotMap.dart';
 import 'package:easypark/Presentation/parkingSlots.dart';
 import 'package:easypark/models/ParkingDetails.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,7 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             InkWell(
                               onTap: () => Navigator.pop(context),
@@ -82,7 +83,21 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                                   child: Icon(Icons.arrow_back_ios_rounded),
                                 ),
                               ),
-                            )
+                            ),
+                            InkWell(
+                              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ParkingLotMap(lat: parking_lot.latitude!, lon: parking_lot.longitude!))),
+                              child: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: Card(
+                                  color: Colors.white,
+                                  child: Icon(Icons.map),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
