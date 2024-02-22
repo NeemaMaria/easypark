@@ -85,7 +85,7 @@ class _ParkingLotDetailsState extends State<ParkingLotDetails> {
                               ),
                             ),
                             InkWell(
-                              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ParkingLotMap(lat: parking_lot.latitude!, lon: parking_lot.longitude!))),
+                              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ParkingLotMap(lat: parking_lot.latitude!, lon: parking_lot.longitude!, name: parking_lot.name!))),
                               child: Container(
                                 height: 50,
                                 width: 50,

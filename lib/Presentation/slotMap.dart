@@ -167,7 +167,7 @@ class _SlotMapState extends State<SlotMap> {
               child: Stack(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height,
+                  height: deviceHeight,
                   child: MapboxMap(
                     accessToken: dotenv.env['MAPBOX_SECRET_TOKEN'],
                     initialCameraPosition: _initialCameraPosition,
@@ -175,7 +175,7 @@ class _SlotMapState extends State<SlotMap> {
                     onStyleLoadedCallback: _onStyleLoadedCallback,
                     myLocationEnabled: true,
                     myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                    minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+                    minMaxZoomPreference: const MinMaxZoomPreference(10, 20),
                   ),
                 ),
                 Column(children: [
