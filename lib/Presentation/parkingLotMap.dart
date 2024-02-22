@@ -1,7 +1,5 @@
-import 'package:easypark/mapbox/directions_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 
 class ParkingLotMap extends StatefulWidget {
   final double lat;
@@ -16,71 +14,71 @@ class ParkingLotMap extends StatefulWidget {
 
 class _ParkingLotMapState extends State<ParkingLotMap> {
 
-  late CameraPosition _initialCameraPosition;
-  late MapboxMapController controller;
-  LatLng currentLatLng = LatLng(double.parse(dotenv.env['LAT']!), double.parse(dotenv.env['LON']!));
-  late CameraPosition slotPosition; // the parking slot
-  Map? modifiedMap;
+  // late CameraPosition _initialCameraPosition;
+  // late MapboxMapController controller;
+  // LatLng currentLatLng = LatLng(double.parse(dotenv.env['LAT']!), double.parse(dotenv.env['LON']!));
+  // late CameraPosition slotPosition; // the parking slot
+  // Map? modifiedMap;
 
-  _onMapCreated(MapboxMapController controller) async {
-    this.controller = controller;
-  }
+  // _onMapCreated(MapboxMapController controller) async {
+  //   this.controller = controller;
+  // }
 
-  _addSourceAndLineLayer() async {
-    // Can animate camera to focus on the item
-    controller.animateCamera(CameraUpdate.newCameraPosition(slotPosition));
+  // _addSourceAndLineLayer() async {
+  //   // Can animate camera to focus on the item
+  //   controller.animateCamera(CameraUpdate.newCameraPosition(slotPosition));
 
-    // Add a polyLine between source and destination
-    Map geometry = modifiedMap!["geometry"]; // slot geometry details
-    final _fills = {
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "id": 0,
-          "properties": <String, dynamic>{},
-          "geometry": geometry,
-        },
-      ],
-    };
+  //   // Add a polyLine between source and destination
+  //   Map geometry = modifiedMap!["geometry"]; // slot geometry details
+  //   final _fills = {
+  //     "type": "FeatureCollection",
+  //     "features": [
+  //       {
+  //         "type": "Feature",
+  //         "id": 0,
+  //         "properties": <String, dynamic>{},
+  //         "geometry": geometry,
+  //       },
+  //     ],
+  //   };
 
-    // Add new source and lineLayer
-    await controller.addSource("fills", GeojsonSourceProperties(data: _fills));
-    await controller.addLineLayer(
-      "fills",
-      "lines",
-      LineLayerProperties(
-        lineColor: Colors.green.toHexStringRGB(),
-        lineCap: "round",
-        lineJoin: "round",
-        lineWidth: 2,
-      ),
-    );
-  }
+  //   // Add new source and lineLayer
+  //   await controller.addSource("fills", GeojsonSourceProperties(data: _fills));
+  //   await controller.addLineLayer(
+  //     "fills",
+  //     "lines",
+  //     LineLayerProperties(
+  //       lineColor: Colors.green.toHexStringRGB(),
+  //       lineCap: "round",
+  //       lineJoin: "round",
+  //       lineWidth: 2,
+  //     ),
+  //   );
+  // }
 
-  _onStyleLoadedCallback() async {
-    controller.addSymbol(SymbolOptions(
-        geometry: LatLng(widget.lat, widget.lon),
-        iconSize: 0.2,
-        iconImage: "assets/icon.png"));
+  // _onStyleLoadedCallback() async {
+  //   controller.addSymbol(SymbolOptions(
+  //       geometry: LatLng(widget.lat, widget.lon),
+  //       iconSize: 0.2,
+  //       iconImage: "assets/icon.png"));
 
-    _addSourceAndLineLayer();
-  }
+  //   _addSourceAndLineLayer();
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 16);
-    // location details
-      getDirectionsAPIResponse(currentLatLng, widget.lat, widget.lon)
-          .then((value) {
-        setState(() {
-          modifiedMap = value;
-        });
-      });
-      slotPosition = CameraPosition(
-          target: LatLng(widget.lat, widget.lon), zoom: 15);
+    // _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 16);
+    // // location details
+    //   getDirectionsAPIResponse(currentLatLng, widget.lat, widget.lon)
+    //       .then((value) {
+    //     setState(() {
+    //       modifiedMap = value;
+    //     });
+    //   });
+    //   slotPosition = CameraPosition(
+    //       target: LatLng(widget.lat, widget.lon), zoom: 15);
   }
 
   @override
@@ -94,15 +92,7 @@ class _ParkingLotMapState extends State<ParkingLotMap> {
           children: [
             SizedBox(
                   height: deviceHeight,
-                  child: MapboxMap(
-                    accessToken: dotenv.env['MAPBOX_SECRET_TOKEN'],
-                    initialCameraPosition: _initialCameraPosition,
-                    onMapCreated: _onMapCreated,
-                    onStyleLoadedCallback: _onStyleLoadedCallback,
-                    myLocationEnabled: true,
-                    myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                    minMaxZoomPreference: const MinMaxZoomPreference(10, 20),
-                  ),
+                  child: Container()
                 ),
                 Column(
                   children: [
@@ -147,13 +137,13 @@ class _ParkingLotMapState extends State<ParkingLotMap> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          controller.animateCamera(
-              CameraUpdate.newCameraPosition(_initialCameraPosition));
-        },
-        child: const Icon(Icons.my_location),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     controller.animateCamera(
+      //         CameraUpdate.newCameraPosition(_initialCameraPosition));
+      //   },
+      //   child: const Icon(Icons.my_location),
+      // ),
     );
   }
 }
