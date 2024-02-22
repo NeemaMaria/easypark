@@ -1,4 +1,5 @@
 import 'package:easypark/Presentation/home.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -17,9 +18,10 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   bool loading = false;
 
-  
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -96,108 +98,137 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   padding: const EdgeInsets.all(30.0),
                   child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'First Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextField(
-                          controller: firstNameController,
-                          decoration: InputDecoration(
-                            hintText: "Enter your First name",
-                            border: OutlineInputBorder(),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'First Name',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Last Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextField(
-                          controller: lastNameController,
-                          decoration: InputDecoration(
-                            hintText: "Enter your last name",
-                            border: OutlineInputBorder(),
+                          TextFormField(
+                              controller: firstNameController,
+                              decoration: InputDecoration(
+                                hintText: "Enter your First name",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Please enter a valid value";
+                              }),
+                          SizedBox(height: 20),
+                          Text(
+                            'Last Name',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Email',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextField(
-                          controller: emailController,
-                          decoration: InputDecoration(
-                            hintText: "Enter your email",
-                            border: OutlineInputBorder(),
+                          TextFormField(
+                              controller: lastNameController,
+                              decoration: InputDecoration(
+                                hintText: "Enter your last name",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Please enter a valid value";
+                              }),
+                          SizedBox(height: 20),
+                          Text(
+                            'Email',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Password',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: "Password",
-                            border: OutlineInputBorder(),
+                          TextFormField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                hintText: "Enter your email",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Please enter a valid value";
+                              }),
+                          SizedBox(height: 20),
+                          Text(
+                            'Password',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Confirm Password',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextField(
-                          controller: confirmPasswordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: "Password",
-                            border: OutlineInputBorder(),
+                          TextFormField(
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText: "Password",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Please enter a valid value";
+                              }),
+                          SizedBox(height: 20),
+                          Text(
+                            'Confirm Password',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        SizedBox(height: 8.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: "Already have an account? ",
-                                  style: TextStyle(
-                                      color: Colors.grey[900],
-                                      fontWeight: FontWeight.bold)),
-                              TextSpan(
-                                  text: "Login",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue[400]),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () =>
-                                        Navigator.pushNamed(context, '/login'))
-                            ])),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => home())),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color.fromARGB(255, 6, 68,
-                                      119)), // Set button background color
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  const Color.fromARGB(255, 253, 248,
-                                      248)), // Set button text color
+                          TextFormField(
+                              controller: confirmPasswordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText: "Password",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Please enter a valid value";
+                              }),
+                          SizedBox(height: 8.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              RichText(
+                                  text: TextSpan(children: [
+                                TextSpan(
+                                    text: "Already have an account? ",
+                                    style: TextStyle(
+                                        color: Colors.grey[900],
+                                        fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                    text: "Login",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue[400]),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () => Navigator.pushNamed(
+                                          context, '/login'))
+                              ])),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => home()));
+                                }
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty
+                                    .all<Color>(Color.fromARGB(255, 6, 68,
+                                        119)), // Set button background color
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        const Color.fromARGB(255, 253, 248,
+                                            248)), // Set button text color
+                              ),
+                              child: loading
+                                  ? Container(
+                                      height: 10,
+                                      width: 10,
+                                      child: CircularProgressIndicator())
+                                  : Text('REGISTER'),
                             ),
-                            child: loading ? Container(height:10, width: 10, child: CircularProgressIndicator()) : Text('REGISTER'),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

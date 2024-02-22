@@ -1,4 +1,5 @@
 import 'package:easypark/Presentation/home.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,9 +13,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   bool loading = false;
 
-  
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -92,58 +94,81 @@ class _LoginPageState extends State<LoginPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(30.0),
                     child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 25),
-                          Text(
-                            "Login",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 50),
-                          TextField(
-                            controller: emailController,
-                            decoration: InputDecoration(
-                              hintText: "Email",
-                              border: OutlineInputBorder(),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 25),
+                            Text(
+                              "Login",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          SizedBox(height: 20),
-                          TextField(
-                            controller: passwordController,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              hintText: "Password",
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                  onPressed: () =>
-                                      Navigator.pushNamed(context, '/signup'),
-                                  child: const Text("Create an account"))
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => home())),
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty
-                                    .all<Color>(Color.fromARGB(255, 6, 68,
-                                        119)), // Set button background color
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        const Color.fromARGB(255, 253, 248,
-                                            248)), // Set button text color
+                            SizedBox(height: 50),
+                            TextFormField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                hintText: "Email",
+                                border: OutlineInputBorder(),
                               ),
-                              child: loading ? Container(height: 10, width:10, child: CircularProgressIndicator()) : Text('LOGIN'),
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Please enter your email";
+                                else if (!value.contains("@")) return "Please enter a valid email";
+                              },
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 20),
+                            TextFormField(
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText: "Password",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Please enter your password";
+                              },
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.pushNamed(context, '/signup'),
+                                    child: const Text("Create an account"))
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => home()));
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty
+                                      .all<Color>(Color.fromARGB(255, 6, 68,
+                                          119)), // Set button background color
+                                  foregroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          const Color.fromARGB(255, 253, 248,
+                                              248)), // Set button text color
+                                ),
+                                child: loading
+                                    ? Container(
+                                        height: 10,
+                                        width: 10,
+                                        child: CircularProgressIndicator())
+                                    : Text('LOGIN'),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

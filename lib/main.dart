@@ -41,6 +41,7 @@ class _EasyParkState extends State<EasyPark> {
         '/home': (context) => const home(),
         '/signup': (context) => SignUpPage(),
         '/user_sessions': (context) => UserSessions(),
+        '/login': (context) => LoginPage()
         // Add more routes as needed
       },
     );
