@@ -4,7 +4,7 @@ import 'package:easypark/Presentation/lot.dart';
 
 
 void main() {
-  runApp(const EasyPark());
+  runApp(EasyPark());
 }
 
 class EasyPark extends StatefulWidget {
